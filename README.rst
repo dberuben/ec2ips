@@ -27,9 +27,16 @@ list ec2 ips for mussh
 
 Features
 --------
+List public IP's for ec2 instance formatted to use in mussh
+
+Get mussh here: https://sourceforge.net/projects/mussh/
+
+This is a quick and dirty version that just works that I needed to do some troubleshooting
 
 * TODO
-
+- Create Tests
+- CI/CD intergration
+- Add more features
 Credits
 ---------
 

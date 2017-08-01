@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import boto3
+import os
 
 """Main module."""
 
 def ec2client(**kwargs):
 
-    if 'region' in kwargs:
-        region=kwargs['region']
-    else:
-        region='us-west-2'
+    defs = {
+            'region_name': 'us-west-2'
+            }
 
-    ec2 = boto3.client("ec2", region_name=region)
+    defs.update(kwargs)
+
+    ec2 = boto3.client("ec2", **defs)
 
     return ec2
 
@@ -19,9 +21,8 @@ def ec2client(**kwargs):
 def all_ips(**kwargs):
 
     client_defs = {
-                'region_name': 'us-east-1'
+                'region_name': get_default_region(),
             }
-
 
     client_defs.update(kwargs)
 
@@ -37,7 +38,7 @@ def all_ips(**kwargs):
 
 def list_names(**kwargs):
     client_defs = {
-            'region_name': 'us-west-2'
+            'region_name': get_default_region(),
             }
 
     client_defs.update(kwargs)
@@ -65,7 +66,7 @@ def list_names(**kwargs):
 def name_equals(name, **kwargs):
 
     client_defs = {
-            'region_name': 'us-east-1',
+            'region_name': get_default_region(),
             'contains': False
             }
 
@@ -90,3 +91,11 @@ def name_equals(name, **kwargs):
                 if tag_name and tag_name.lower() == name.lower():
                     if 'PublicIpAddress' in aa:
                         print(aa['PublicIpAddress'])
+
+
+def get_default_region():
+    if 'AWS_DEFAULT_REGION' in os.environ:
+        return os.environ['AWS_DEFAULT_REGION']
+    else:
+        return 'us-west-2'
+
