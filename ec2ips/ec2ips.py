@@ -69,12 +69,19 @@ def list_names(**kwargs):
 
 def name_equals(name, **kwargs):
 
+    contains = False
+
+    if 'contains' in kwargs:
+        contains = True
+
     client_defs = {
             'region_name': get_default_region(),
-            'contains': False
             }
 
     client_defs.update(kwargs)
+
+    if 'contains' in client_defs:
+        del client_defs['contains']
 
     ec2 = ec2client(**client_defs)
 
@@ -87,7 +94,7 @@ def name_equals(name, **kwargs):
             for tag in aa['Tags']:
                 if tag['Key'] == 'Name':
                     tag_name = tag['Value']
-            if client_defs['contains']:
+            if contains:
                 if name.lower() in tag_name.lower():
                     if 'PublicIpAddress' in aa:
                         print(aa['PublicIpAddress'])
