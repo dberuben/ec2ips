@@ -33,6 +33,13 @@ Get mussh here: https://sourceforge.net/projects/mussh/
 
 This is a quick and dirty version that just works that I needed to do some troubleshooting
 
+Installation
+------------
+
+Install with pip from github
+
+`pip install git+https://github.com/ibejohn818/ec2ips.git`
+
 
 Quick examples
 --------------
