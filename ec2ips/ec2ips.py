@@ -72,7 +72,7 @@ def name_equals(name, **kwargs):
     contains = False
 
     if 'contains' in kwargs:
-        contains = True
+        contains = kwargs['contains']
 
     client_defs = {
             'region_name': get_default_region(),
