@@ -36,7 +36,7 @@ This is a quick and dirty version that just works that I needed to do some troub
 
 Quick examples
 --------------
-Update on all instances
+Uptime on all instances
 
 `mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'`
 
