@@ -36,6 +36,25 @@ This is a quick and dirty version that just works that I needed to do some troub
 
 Quick examples
 --------------
+List all instance name tags and #instance
+
+`ec2ips list_names`
+
+All ips
+
+`ec2ips all`
+
+Instance name equals 'web'
+
+`ec2ips name web`
+
+Instances name contains 'web'
+
+`ec2ips name web --contains`
+
+Examples w/mussh
+---------------
+
 Uptime on all instances
 
 `mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'`
@@ -44,9 +63,6 @@ PHP Procs on instances containing 'web'
 
 `mussh -h \`ec2ips name web --contains\` -m 0 -l 'ec2-user' -c 'ps aux | grep php'`
 
-List all instance name tags and #instance
-
-`ec2ips list_names`
 
 * TODO
 - Create Tests
