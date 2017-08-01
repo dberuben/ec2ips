@@ -56,12 +56,16 @@ def list_names(**kwargs):
                 if tag['Key'] == 'Name':
                     name = tag['Value']
             if name:
-                names.update({name: name})
+                if name in names:
+                    names[name] += 1
+                else:
+                    names.update({name: 1})
 
 
     if len(names)>0:
-        for name in names:
-            print(name)
+        print("Name : #instances")
+        for k, v in names.items():
+            print('{0}: {1}'.format(k, v))
 
 def name_equals(name, **kwargs):
 
