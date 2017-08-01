@@ -33,6 +33,21 @@ Get mussh here: https://sourceforge.net/projects/mussh/
 
 This is a quick and dirty version that just works that I needed to do some troubleshooting
 
+
+Quick examples
+--------------
+Update on all instances
+
+`mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'`
+
+PHP Procs on instances containing 'web'
+
+`mussh -h \`ec2ips name web --contains\` -m 0 -l 'ec2-user' -c 'ps aux | grep php'`
+
+List all instance name tags and #instance
+
+`ec2ips list_names`
+
 * TODO
 - Create Tests
 - CI/CD intergration
