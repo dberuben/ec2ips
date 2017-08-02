@@ -8,8 +8,7 @@ import pytest
 from click.testing import CliRunner
 
 from ec2ips import ec2ips
-from ec2ips import cli
-
+import boto3
 
 @pytest.fixture
 def response():
@@ -20,14 +19,24 @@ def response():
     # import requests
     # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
+def test_client(monkeypatch):
 
-def test_content(response):
+    def boto3_client(arg, **kwargs):
+        return arg
+
+    monkeypatch.setattr(boto3, 'client', boto3_client)
+
+    ec2 = ec2ips.ec2client()
+
+    assert ec2 == 'ec2'
+
+def __test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
     # from bs4 import BeautifulSoup
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
 
-def test_command_line_interface():
+def __test_command_line_interface():
     """Test the CLI."""
     runner = CliRunner()
     result = runner.invoke(cli.main)
