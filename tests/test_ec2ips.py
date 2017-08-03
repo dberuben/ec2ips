@@ -28,7 +28,7 @@ def ec2client_mock(monkeypatch):
 
         def describe_instances(self):
             if 'mock_errors' in os.environ:
-                pass
+                return {}
             else:
                 return {
                     'Reservations': [
@@ -84,7 +84,12 @@ def ec2client_mock(monkeypatch):
                             {
                                 'State': {
                                     'Code': 20
-                                }
+                                },
+                                'PublicIpAddress': '13.14.15.16',
+                                'Tags': [
+                                    { 'Key': 'Key', 'Value': 'Value' },
+                                    { 'Key': 'Name', 'Value': 'ErrorServer' }
+                                ]
                             },
                             {
                                 'State': {
@@ -110,11 +115,37 @@ def test_client(ec2client_mock):
 
     # assert ec2 == 'ec2'
 
+def test_ec2ips_get_default_region():
+
+    r = ec2ips.get_default_region()
+
+    assert r == 'us-west-2'
+
+    os.environ['AWS_DEFAULT_REGION'] = 'iraq-east-2'
+
+    r = ec2ips.get_default_region()
+
+    assert r == 'iraq-east-2'
+
+    del os.environ['AWS_DEFAULT_REGION']
+
 def test_ec2ips_list_names(ec2client_mock):
 
     servers = ec2ips.list_names()
 
     assert '2: Server3' in servers
+
+    assert 'ErrorServer' not in servers
+
+    os.environ['mock_errors'] = '1'
+
+    with pytest.raises(KeyError) as excep:
+        servers = ec2ips.list_names()
+
+    assert 'Reservations' in str(excep.value)
+
+    del os.environ['mock_errors']
+
 
 def __test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
