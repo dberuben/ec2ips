@@ -8,7 +8,9 @@ import pytest
 from click.testing import CliRunner
 
 from ec2ips import ec2ips
+from ec2ips import cli
 import boto3
+from pprint import pprint
 
 @pytest.fixture
 def response():
@@ -19,16 +21,25 @@ def response():
     # import requests
     # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
-def test_client(monkeypatch):
+@pytest.fixture
+def scaffold_boto3(monkeypatch):
 
     def boto3_client(arg, **kwargs):
-        return arg
+        return [arg, kwargs]
 
     monkeypatch.setattr(boto3, 'client', boto3_client)
 
-    ec2 = ec2ips.ec2client()
 
-    assert ec2 == 'ec2'
+def test_client(scaffold_boto3):
+
+    ec2 = ec2ips.ec2client()
+    pprint(ec2)
+
+    # assert ec2 == 'ec2'
+
+
+
+
 
 def __test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
