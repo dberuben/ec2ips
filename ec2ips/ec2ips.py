@@ -2,6 +2,7 @@
 
 import boto3
 import os
+import collections
 
 """Main module."""
 
@@ -34,7 +35,60 @@ def all_ips(**kwargs):
 
     for a in i['Reservations']:
         for aa in a['Instances']:
-            print(aa['PublicIpAddress'])
+            if 'PublicIpAddress' in aa:
+                ips.append(aa['PublicIpAddress'])
+
+    return ips
+
+def list_ips(**kwargs):
+    client_defs = {
+            'region_name': get_default_region(),
+            }
+
+    client_defs.update(kwargs)
+
+    ec2 = ec2client(**client_defs)
+
+
+    # get elastic IP's
+    eips = []
+
+    ips = ec2.describe_addresses()
+
+    for a in ips['Addresses']:
+        eips.append(a['PublicIp'])
+
+    i = ec2.describe_instances()
+    servers = []
+
+    for a in i['Reservations']:
+        for aa in a['Instances']:
+            if aa['State']['Code'] != 16:
+                continue;
+            if 'PublicIpAddress' not in aa:
+                continue
+
+            ip = aa['PublicIpAddress']
+            name = ''
+
+            for tag in aa['Tags']:
+                if tag['Key'] == 'Name':
+                    name = tag['Value']
+
+            line = '{0}: {1}'.format(name, ip)
+            servers.append(line)
+
+    servers = sorted(servers)
+
+    for k, v in enumerate(servers):
+        ip = v.split(':')[1].lstrip()
+        pre = '  '
+        if ip in eips:
+            pre = '* '
+
+        servers[k] = '{0}{1}'.format(pre,v)
+
+    return servers
 
 def list_names(**kwargs):
     client_defs = {
@@ -51,6 +105,8 @@ def list_names(**kwargs):
 
     for a in i['Reservations']:
         for aa in a['Instances']:
+            if aa['State']['Code'] != 16:
+                continue;
             name = False
             for tag in aa['Tags']:
                 if tag['Key'] == 'Name':
@@ -61,11 +117,13 @@ def list_names(**kwargs):
                 else:
                     names.update({name: 1})
 
+    servers = []
 
-    if len(names)>0:
-        print("Name : #instances")
-        for k, v in names.items():
-            print('{0}: {1}'.format(k, v))
+    for k, v in names.items():
+        servers.append('{0}: {1}'.format(v, k))
+
+    return servers
+
 
 def name_equals(name, **kwargs):
 
@@ -90,6 +148,8 @@ def name_equals(name, **kwargs):
     ips = []
     for a in i['Reservations']:
         for aa in a['Instances']:
+            if aa['State']['Code'] != 16:
+                continue;
             tag_name = False
             for tag in aa['Tags']:
                 if tag['Key'] == 'Name':
