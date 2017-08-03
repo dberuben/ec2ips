@@ -28,7 +28,7 @@ def all(region):
 @click.argument('name')
 @click.option('--region',default=None,help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')
 @click.option('--contains',is_flag=True,default=False,help='flag to use fuzzy search')
-def name(name,region,contains):
+def ips(name,region,contains):
     ec2ips.name_equals(name,region_name=region,contains=contains)
 
 @main.command(help='List all instance name tags for referenc')
@@ -47,7 +47,7 @@ def list_names(region):
 
 @main.command(help='List all instances w/ips for reference')
 @click.option('--region',default=None,help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')
-def list_ips(region):
+def ls(region):
     servers = ec2ips.list_ips(region_name=region)
     if len(servers)<=0:
         click.echo("No servers available")

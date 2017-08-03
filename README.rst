@@ -64,7 +64,8 @@ Examples w/mussh
 
 Uptime on all instances
 
-`mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'`
+. code::bash
+mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'
 
 PHP Procs on instances containing 'web'
 
