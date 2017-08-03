@@ -6,10 +6,10 @@
 import pytest
 
 from click.testing import CliRunner
-
+import os
+import boto3
 from ec2ips import ec2ips
 from ec2ips import cli
-import boto3
 from pprint import pprint
 
 @pytest.fixture
@@ -22,23 +22,86 @@ def response():
     # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
 @pytest.fixture
-def scaffold_boto3(monkeypatch):
+def ec2client_mock(monkeypatch):
 
-    def boto3_client(arg, **kwargs):
-        return [arg, kwargs]
+    class ec2client_mock(object):
 
-    monkeypatch.setattr(boto3, 'client', boto3_client)
+        def describe_instances(self):
+            if 'mock_errors' in os.environ:
+                pass
+            else:
+                return {
+                    'Reservations': [
+                        { 'Instances': [
+                            {
+                                'State': {
+                                    'Code': 16
+                                },
+                                'PublicIpAddress': '1.2.3.4',
+                                'Tags': [
+                                    { 'Key': 'Key', 'Value': 'Value' },
+                                    { 'Key': 'Name', 'Value': 'Server1' }
+                                ]
+                            },
+                            {
+                                'State': {
+                                    'Code': 16
+                                },
+                                'PublicIpAddress': '5.6.7.8',
+                                'Tags': [
+                                    { 'Key': 'Key', 'Value': 'Value' },
+                                    { 'Key': 'Name', 'Value': 'Server2' }
+                                ]
+
+                            },
+                            {
+                                'State': {
+                                    'Code': 16
+                                },
+                                'PublicIpAddress': '9.10.11.12',
+                                'Tags': [
+                                    { 'Key': 'Key', 'Value': 'Value' },
+                                    { 'Key': 'Name', 'Value': 'Server2' }
+                                ]
+
+                            }
+
+                        ]
+                        },
+                        {'Instances': [
+                            {
+                                'State': {
+                                    'Code': 20
+                                }
+                            },
+                            {
+                                'State': {
+                                    'Code': 90
+                                }
+                            }
+                        ]
+                    }]
+                }
+        def describe_addresses(self):
+            pass
+
+    def client_mock(arg, **kwargs):
+        return ec2client_mock()
+
+    monkeypatch.setattr(boto3, 'client', client_mock)
 
 
-def test_client(scaffold_boto3):
+def test_client(ec2client_mock):
 
     ec2 = ec2ips.ec2client()
     pprint(ec2)
 
     # assert ec2 == 'ec2'
 
+def test_ec2ips_list_names(ec2client_mock):
 
-
+   servers = ec2ips.list_names()
+   pprint(servers)
 
 
 def __test_content(response):
