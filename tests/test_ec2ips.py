@@ -61,10 +61,22 @@ def ec2client_mock(monkeypatch):
                                 'PublicIpAddress': '9.10.11.12',
                                 'Tags': [
                                     { 'Key': 'Key', 'Value': 'Value' },
-                                    { 'Key': 'Name', 'Value': 'Server2' }
+                                    { 'Key': 'Name', 'Value': 'Server3' }
+                                ]
+
+                            },
+                            {
+                                'State': {
+                                    'Code': 16
+                                },
+                                'PublicIpAddress': '13.14.15.16',
+                                'Tags': [
+                                    { 'Key': 'Key', 'Value': 'Value' },
+                                    { 'Key': 'Name', 'Value': 'Server3' }
                                 ]
 
                             }
+
 
                         ]
                         },
@@ -100,9 +112,9 @@ def test_client(ec2client_mock):
 
 def test_ec2ips_list_names(ec2client_mock):
 
-   servers = ec2ips.list_names()
-   pprint(servers)
+    servers = ec2ips.list_names()
 
+    assert '2: Server3' in servers
 
 def __test_content(response):
     """Sample pytest test function with the pytest fixture as an argument."""
