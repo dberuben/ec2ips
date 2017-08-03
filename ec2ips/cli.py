@@ -40,7 +40,7 @@ def list_names(region):
         return
 
     click.echo("--------------")
-    click.echo("Name : #instances")
+    click.echo("#instances : Name")
     click.echo("--------------")
     for s in servers:
         click.echo(s)
