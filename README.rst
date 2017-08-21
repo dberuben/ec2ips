@@ -45,15 +45,15 @@ Quick examples
 --------------
 List all instance name tags and #instance
 
-`ec2ips list_names`
+:code:`$: ec2ips list_names`
 
 All ips
 
-`ec2ips all`
+:code:`$: ec2ips all`
 
 Instance name equals 'web'
 
-`ec2ips name web`
+:code:`$: ec2ips name web`
 
 Instances name contains 'web'
 
@@ -64,8 +64,8 @@ Examples w/mussh
 
 Uptime on all instances
 
-. code::bash
-mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'
+
+:code:`$: mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'`
 
 PHP Procs on instances containing 'web'
 
