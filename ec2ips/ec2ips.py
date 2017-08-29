@@ -127,7 +127,7 @@ def list_names(**kwargs):
 
 def name_equals(name, **kwargs):
 
-    contains = False
+    contains = True
 
     if 'contains' in kwargs:
         contains = kwargs['contains']

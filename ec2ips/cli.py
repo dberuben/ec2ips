@@ -5,6 +5,7 @@
 import click
 import ec2ips
 
+
 @click.group()
 def main(args=None):
     """Console script for ec2ips."""
@@ -12,11 +13,11 @@ def main(args=None):
 
 
 @main.command()
-@click.option('--region',default=None,help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')
+@click.option('--region', '-r', default=None, help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')  # noqa
 def all(region):
     ips = ec2ips.all_ips(region_name=region)
 
-    if len(ips)<=0:
+    if len(ips) <= 0:
         click.echo("No ips")
         return
 
@@ -24,18 +25,19 @@ def all(region):
         click.echo(ip)
 
 
-@main.command(help='return ips by instance name. use --contains flag for fuzzy search. *not case sensitive')
+@main.command(help='return ips by instance name. use --contains flag for fuzzy search. *not case sensitive') # noqa
 @click.argument('name')
-@click.option('--region',default=None,help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')
-@click.option('--contains',is_flag=True,default=False,help='flag to use fuzzy search')
-def ips(name,region,contains):
-    ec2ips.name_equals(name,region_name=region,contains=contains)
+@click.option('--region', '-r', default=None, help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]') # noqa
+@click.option('--exact', '-e', is_flag=True,default=False, help='flag to use exact vs fuzzy search') # noqa
+def ips(name, region, exact):
+    ec2ips.name_equals(name, region_name=region, contains=exact)
 
-@main.command(help='List all instance name tags for referenc')
-@click.option('--region',default=None,help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')
+
+@main.command(help='List all instance name tags for reference ')
+@click.option('--region', '-r', default=None, help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]') # noqa
 def list_names(region):
     servers = ec2ips.list_names(region_name=region)
-    if len(servers)<=0:
+    if len(servers) <= 0:
         click.echo("No servers available")
         return
 
@@ -45,11 +47,12 @@ def list_names(region):
     for s in servers:
         click.echo(s)
 
+
 @main.command(help='List all instances w/ips for reference')
-@click.option('--region',default=None,help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]')
+@click.option('--region', '-r', default=None, help='Region to use. Default: us-west-2 or env[AWS_DEFAULT_REGION]') # noqa
 def ls(region):
     servers = ec2ips.list_ips(region_name=region)
-    if len(servers)<=0:
+    if len(servers) <= 0:
         click.echo("No servers available")
         return
 
@@ -58,6 +61,7 @@ def ls(region):
     click.echo("--------------")
     for s in servers:
         click.echo(s)
+
 
 if __name__ == "__main__":
     main()
