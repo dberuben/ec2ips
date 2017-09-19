@@ -38,8 +38,8 @@ Installation
 
 Install with pip from github
 
-`pip install git+github.com:dberuben/ec2ips.git`
-`pip install boto3`
+:code: `$: pip install git+github.com:dberuben/ec2ips.git`
+:code: `$: pip install boto3`
 
 
 Quick examples
