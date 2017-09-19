@@ -38,7 +38,8 @@ Installation
 
 Install with pip from github
 
-`pip install git+https://github.com/ibejohn818/ec2ips.git`
+`pip install git+github.com:dberuben/ec2ips.git`
+`pip install boto3`
 
 
 Quick examples
@@ -59,23 +60,6 @@ Instances name contains 'web'
 
 `ec2ips name web --contains`
 
-Examples w/mussh
----------------
-
-Uptime on all instances
-
-
-:code:`$: mussh -h \`ec2ips all\` -m 0 -l 'ec2-user' -c 'uptime'`
-
-PHP Procs on instances containing 'web'
-
-`mussh -h \`ec2ips name web --contains\` -m 0 -l 'ec2-user' -c 'ps aux | grep php'`
-
-
-* TODO
-- Create Tests
-- CI/CD intergration
-- Add more features
 Credits
 ---------
 
