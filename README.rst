@@ -18,20 +18,12 @@ EC2 IP Lister
      :alt: Updates
 
 
-list ec2 ips for mussh
+list ec2 ips 
 
 
 * Free software: MIT license
 * Documentation: https://ec2ips.readthedocs.io.
 
-
-Features
---------
-List public IP's for ec2 instance formatted to use in mussh
-
-Get mussh here: https://sourceforge.net/projects/mussh/
-
-This is a quick and dirty version that just works that I needed to do some troubleshooting
 
 Installation
 ------------
