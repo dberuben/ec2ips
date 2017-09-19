@@ -35,8 +35,8 @@ def all_ips(**kwargs):
 
     for a in i['Reservations']:
         for aa in a['Instances']:
-            if 'PublicIpAddress' in aa:
-                ips.append(aa['PublicIpAddress'])
+            if 'PrivateIpAddress' in aa:
+                ips.append(aa['PrivateIpAddress'])
 
     return ips
 
@@ -65,14 +65,14 @@ def list_ips(**kwargs):
         for aa in a['Instances']:
             if aa['State']['Code'] != 16:
                 continue;
-            if 'PublicIpAddress' not in aa:
+            if 'PrivateIpAddress' not in aa:
                 continue
 
-            ip = aa['PublicIpAddress']
+            ip = aa['PrivateIpAddress']
             name = ''
 
             for tag in aa['Tags']:
-                if tag['Key'] == 'Name':
+                if tag['Key'] == 'Hostname':
                     name = tag['Value']
 
             line = '{0}: {1}'.format(name, ip)
@@ -109,7 +109,7 @@ def list_names(**kwargs):
                 continue;
             name = False
             for tag in aa['Tags']:
-                if tag['Key'] == 'Name':
+                if tag['Key'] == 'Hostname':
                     name = tag['Value']
             if name:
                 if name in names:
@@ -152,16 +152,16 @@ def name_equals(name, **kwargs):
                 continue;
             tag_name = False
             for tag in aa['Tags']:
-                if tag['Key'] == 'Name':
+                if tag['Key'] == 'Hostname':
                     tag_name = tag['Value']
             if contains:
                 if name.lower() in tag_name.lower():
-                    if 'PublicIpAddress' in aa:
-                        print(aa['PublicIpAddress'])
+                    if 'PrivateIpAddress' in aa:
+                        print(aa['PrivateIpAddress'])
             else:
                 if tag_name and tag_name.lower() == name.lower():
-                    if 'PublicIpAddress' in aa:
-                        print(aa['PublicIpAddress'])
+                    if 'PrivateIpAddress' in aa:
+                        print(aa['PrivateIpAddress'])
 
 
 def get_default_region():
